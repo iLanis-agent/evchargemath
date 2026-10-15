@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EV Charge Math - app</title>
+<link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css">
+<style>
+  :root { --accent: #5a7a2a; }
+  h1 { color: var(--accent); margin-bottom: 0.2em; }
+  .tag { color: var(--accent); font-style: italic; }
+  .card { border: 1px solid #ddd; border-left: 4px solid var(--accent); padding: 1em 1.2em; margin: 1.2em 0; border-radius: 4px; }
+  .big { font-size: 1.2rem; font-weight: 700; color: var(--accent); margin-top: 0.8em; }
+  .err { color: #b00; font-weight: 700; }
+  label { display: block; margin-top: 0.6em; font-size: 0.9em; }
+  input, select { max-width: 12em; }
+  .foot { margin-top: 2.5em; font-size: 0.85em; color: #777; }
+</style>
+</head>
+<body>
+<h1>EV Charge Math</h1>
+<p class="tag">Charge truth, time truth and breaker truth - labeled norms, honest arithmetic.</p>
+
+<div class="card">
+  <h3>The charge truth</h3>
+  <label for="c-volts">Volts at the plug</label>
+  <input id="c-volts" type="number" step="any" value="240">
+  <label for="c-amps">Amps the charger draws</label>
+  <input id="c-amps" type="number" step="any" value="32">
+  <label for="c-eff">Miles per kilowatt-hour (your car)</label>
+  <input id="c-eff" type="number" step="any" value="3.5">
+  <p class="big" id="c-out"></p>
+</div>
+
+<div class="card">
+  <h3>The time truth</h3>
+  <label for="t-miles">Miles to add</label>
+  <input id="t-miles" type="number" step="any" value="250">
+  <label for="t-mph">Charge pace (miles of charge an hour)</label>
+  <input id="t-mph" type="number" step="any" value="26.9">
+  <p class="big" id="t-out"></p>
+</div>
+
+<div class="card">
+  <h3>The breaker truth</h3>
+  <label for="b-charger">Charger setting (amps)</label>
+  <input id="b-charger" type="number" step="any" value="32">
+  <label for="b-breaker">Breaker size (amps)</label>
+  <input id="b-breaker" type="number" step="any" value="40">
+  <p class="big" id="b-out"></p>
+</div>
+
+<p class="foot">The 0.8 continuous-load derate is a labeled norm - the arithmetic is honest, and the extension cord keeps the honest ledger.</p>
+
+<script src="engine.js"></script>
+<script>
+function g(id){ return document.getElementById(id); }
+function v(id){ var n = parseFloat(g(id).value); return isNaN(n) ? NaN : n; }
+function show(id, s, bad){ var el = g(id); el.textContent = s; el.className = bad ? "err big" : "big"; }
+
+function runCharge(){
+  var args = [v("c-volts"), v("c-amps"), v("c-eff")];
+  var r = EvChargeMath.chargePlan.apply(null, args);
+  if (r.error) return show("c-out", r.error, true);
+  show("c-out", EvChargeMath.renderCharge.apply(null, [r].concat(args)), false);
+}
+function runTime(){
+  var args = [v("t-miles"), v("t-mph")];
+  var r = EvChargeMath.timePlan.apply(null, args);
+  if (r.error) return show("t-out", r.error, true);
+  show("t-out", EvChargeMath.renderTime.apply(null, [r].concat(args)), false);
+}
+function runBreaker(){
+  var args = [v("b-charger"), v("b-breaker")];
+  var r = EvChargeMath.breakerPlan.apply(null, args);
+  if (r.error) return show("b-out", r.error, true);
+  show("b-out", EvChargeMath.renderBreaker.apply(null, [r].concat(args)), false);
+}
+["c-volts", "c-amps", "c-eff"].forEach(function(id){ g(id).addEventListener("input", runCharge); });
+["t-miles", "t-mph"].forEach(function(id){ g(id).addEventListener("input", runTime); });
+["b-charger", "b-breaker"].forEach(function(id){ g(id).addEventListener("input", runBreaker); });
+runCharge(); runTime(); runBreaker();
+</script>
+</body>
+</html>
