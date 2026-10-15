@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EV Charge Math - the home charging honesty tool</title>
+<link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css">
+<style>
+  :root { --accent: #5a7a2a; }
+  h1 { color: var(--accent); margin-bottom: 0.2em; }
+  .tag { color: var(--accent); font-style: italic; }
+  .card { border: 1px solid #ddd; border-left: 4px solid var(--accent); padding: 1em 1.2em; margin: 1.2em 0; border-radius: 4px; }
+  .foot { margin-top: 2.5em; font-size: 0.85em; color: #777; }
+  .go { display: inline-block; margin-top: 0.8em; padding: 0.55em 1.1em; background: var(--accent); color: #fff; border-radius: 4px; text-decoration: none; }
+</style>
+</head>
+<body>
+<h1>EV Charge Math</h1>
+<p class="tag">The plug on the wall has a pace, the range you want has a clock, and the breaker in the panel keeps a fifth of itself back from every continuous load.</p>
+<a class="go" href="app.html">Open the app &rarr;</a>
+<div class="card">
+  <h3>The charge truth</h3>
+  <p>Volts times amps is kilowatts, and kilowatts times the car's miles per kilowatt-hour is the honest pace - the 240-volt, 32-amp plug adds about 27 miles an hour, and the 120-volt outlet adds about 5.</p>
+</div>
+<div class="card">
+  <h3>The time truth</h3>
+  <p>Range is a clock. Hold the miles you want against the pace the plug gives and the answer is either back full by breakfast, the evening and the night, or more than a day on the plug.</p>
+</div>
+<div class="card">
+  <h3>The breaker truth</h3>
+  <p>A continuous load gets only 80% of the breaker's name (labeled norm). The 40-amp charger on the 40-amp breaker asks for 125% of the honest 32 - and the breaker trips on the setting.</p>
+</div>
+<div class="card">
+  <h3>What it never does</h3>
+  <p>It never reads the breaker's face value as the budget, never calls the brochure's peak a pace, and never forgets the derate is a labeled norm - the extension cord keeps the honest ledger.</p>
+</div>
+<p class="foot">EV Charge Math is open source - the engine is small enough to read, and the math is plain enough to argue with.</p>
+</body>
+</html>
